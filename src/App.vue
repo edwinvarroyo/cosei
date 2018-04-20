@@ -55,7 +55,7 @@
       <v-toolbar-title class="mr-5 align-center">
         <span class="title">COSEI</span>
       </v-toolbar-title>
-      <v-layout row justify-center>
+      <v-layout row justify-center hidden-sm-and-down>
         <v-dialog v-model="dialog" persistent max-width="500px">
           <v-btn color="black" outline dark slot="activator">Registrarse</v-btn>
           <v-card>
