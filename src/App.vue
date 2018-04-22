@@ -164,25 +164,7 @@
       </v-layout>
     </v-toolbar>
     <v-content>
-      <v-container fill-height>
-        <v-layout justify-center align-center>
-          <v-flex xs12>
-            <v-expansion-panel popout>
-              <v-expansion-panel-content v-for="(item,i) in Libros" :key="i">
-                <div slot="header"><v-icon >{{item.icon}}</v-icon>  {{item.titulo}}</div>
-                <v-card>
-                  <v-card-text>
-                  <div v-if="item.tipo == 'Libro'">Autor: {{item.autor}}</div><div v-if="item.tipo == 'Pelicula'">Director: {{item.autor}}</div>
-                  <br/>
-                  Clasificacion: {{item.clasificacion}}
-                </v-card-text>
-                </v-card>
-              </v-expansion-panel-content>
-            </v-expansion-panel>
-          </v-flex>
-          <router-view/>
-        </v-layout>
-      </v-container>
+      <router-view></router-view>
       <v-snackbar
         :timeout="4000"
         :color="succes"
@@ -234,8 +216,6 @@ export default {
   },
   methods: {
     search: function () {
-      this.coseiResponse = ''
-      console.log(this.toSearch)
       var proxyUrl = 'https://cors-anywhere.herokuapp.com/'
       var targetUrl = 'http://148.206.79.169/F/MB4MQ3RCAUTE5REMFRCPBN2GNKIYKK6N89B1F4XB2TVINE78C9-17845?func=find-b&request=' + this.toSearch + '&find_code=WRD&adjacent=N&x=48&y=11'
       console.log(Data.proxyUrl + targetUrl)
@@ -302,7 +282,7 @@ export default {
       }
       console.log(libros)
       this.Libros = libros
-      this.coseiResponse = ''
+      this.$router.push({name: 'resultados', params: { Libros: this.Libros }})
     },
     menu: function (index) {
       this.$router.push('/' + index)
