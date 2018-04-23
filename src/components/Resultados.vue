@@ -28,9 +28,6 @@ export default {
   props: ['Libros'],
   data: () => ({
   }),
-  created: function () {
-    console.log(this.Libros)
-  },
   methods: {
   }
 }

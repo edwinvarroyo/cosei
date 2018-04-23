@@ -282,6 +282,7 @@ export default {
       }
       console.log(libros)
       this.Libros = libros
+      this.$router.replace('/')
       this.$router.push({name: 'resultados', params: { Libros: this.Libros }})
     },
     menu: function (index) {
