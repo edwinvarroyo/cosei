@@ -5,7 +5,7 @@
   >
     <v-navigation-drawer
       fixed
-      clipped
+      :clipped="$vuetify.breakpoint.lgAndUp"
       v-model="drawer"
       app
     >
@@ -51,7 +51,6 @@
       app
     >
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-      <v-icon class="mx-3">fab fa-youtube</v-icon>
       <v-toolbar-title class="mr-5 align-center">
         <span class="title">COSEI</span>
       </v-toolbar-title>
@@ -214,7 +213,7 @@ export default {
     succes: 'green',
     enviando: false,
     toSearch: '',
-    drawer: true,
+    drawer: null,
     items: [
       {icon: 'trending_up', text: 'Populares', index: 'populares'},
       { icon: 'history', text: 'Historial', index: 'historial' },
