@@ -1,7 +1,6 @@
 <template>
   <v-container fill-height>
     <v-layout justify-center align-center>
-      <div>Libros</div>
       <v-flex xs12>
         <v-expansion-panel popout>
           <v-expansion-panel-content v-for="(item,i) in Libros" :key="i">

@@ -1,6 +1,5 @@
 <template>
   <v-app
-    dark
     id="inspire"
   >
     <v-navigation-drawer
@@ -51,8 +50,9 @@
       app
     >
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+      <img src='http://cosei.uam.mx/images/logos/1.png' class='logo' hidden/>
       <v-toolbar-title class="mr-5 align-center">
-        <span class="title">COSEI</span>
+        <span class="title" @click="home">COSEI</span>
       </v-toolbar-title>
       <v-layout row justify-center hidden-sm-and-down>
         <v-dialog v-model="dialog" persistent max-width="500px">
@@ -76,7 +76,7 @@
                   <v-flex xs12>
                     <v-text-field label="Contraseña" type="password" v-model='password' required></v-text-field>
                   </v-flex>
-                  <v-flex xs12>
+                  <v-flex xs12 hidden>
                     <v-select
                       label="Intereses"
                       multiple
@@ -110,26 +110,11 @@
             <v-card-text v-if="!enviando">
               <v-container grid-list-md>
                 <v-layout wrap >
-                  <v-flex xs12 sm6 >
-                    <v-text-field label="Nombre" v-model='nombre' required></v-text-field>
-                  </v-flex>
-                  <v-flex xs12 sm6 >
-                    <v-text-field label="Apellido" v-model='lastname' hint="Opcional"></v-text-field>
-                  </v-flex>
                   <v-flex xs12>
                     <v-text-field label="Email" v-model='email' required></v-text-field>
                   </v-flex>
                   <v-flex xs12>
                     <v-text-field label="Contraseña" type="password" v-model='password' required></v-text-field>
-                  </v-flex>
-                  <v-flex xs12>
-                    <v-select
-                      label="Intereses"
-                      multiple
-                      autocomplete
-                      chips
-                      :items="['Skiing', 'Ice hockey', 'Soccer', 'Basketball', 'Hockey', 'Reading', 'Writing', 'Coding', 'Basejump']"
-                    ></v-select>
                   </v-flex>
                 </v-layout>
               </v-container>
@@ -149,13 +134,13 @@
         </v-dialog>
       </v-layout>
       <v-spacer></v-spacer>
-      <v-layout row align-center style="max-width: 650px">
+      <v-layout row align-center style="max-width: 650px" hidden-sm-and-down>
         <v-text-field
           placeholder="Buscar..."
           single-line
           v-model="toSearch"
           append-icon="search"
-          :append-icon-cb="() => {}"
+          :append-icon-cb="search"
           color="white"
           hide-details
           v-on:keyup.enter='search'
@@ -163,7 +148,12 @@
       </v-layout>
     </v-toolbar>
     <v-content>
-      <router-view></router-view>
+      <v-layout v-if='searchprogress' class='searchprogress' row justify-space-around>
+        <v-flex xs2>
+          <v-progress-circular :size="80" :width="7" indeterminate color="red"></v-progress-circular>
+        </v-flex>
+      </v-layout>
+      <router-view v-else></router-view>
       <v-snackbar
         :timeout="4000"
         :color="succes"
@@ -186,6 +176,7 @@ import Data from './assets/Data'
 export default {
   data: () => ({
     dialog: false,
+    searchprogress: false,
     nombre: '',
     lastname: '',
     password: '',
@@ -215,12 +206,13 @@ export default {
   },
   methods: {
     search: function () {
-      var proxyUrl = 'https://cors-anywhere.herokuapp.com/'
-      var targetUrl = 'http://148.206.79.169/F/MB4MQ3RCAUTE5REMFRCPBN2GNKIYKK6N89B1F4XB2TVINE78C9-17845?func=find-b&request=' + this.toSearch + '&find_code=WRD&adjacent=N&x=48&y=11'
-      console.log(Data.proxyUrl + targetUrl)
-      axios.get(proxyUrl + targetUrl)
+      this.searchprogress = true
+      var targetUrl = 'http://148.206.79.169/F/6FX47H7NT3LEQGU9M2E4T4NE81C1PMETKB612RINDXDH4BYUL3-21773?func=find-b&request=' + this.toSearch + '&find_code=WRD&adjacent=N&x=51&y=11'
+      axios.get(Data.proxyUrl + targetUrl)
         .then(res => {
-          this.getLibros(res.data)
+          if (res.status === 200) {
+            this.getLibros(res.data)
+          }
         })
         .catch(function (error) {
           console.log('err', error)
@@ -231,7 +223,6 @@ export default {
       var doc = parser.parseFromString(data, 'text/html')
       var libros = []
       var rows = doc.getElementsByTagName('table')[3].rows
-      console.log('rows', rows)
       for (var i = 1; i < rows.length; i++) {
         var libro = {}
         var libroinfo = rows[i].cells
@@ -279,10 +270,10 @@ export default {
         }
         libros.push(libro)
       }
-      console.log(libros)
       this.Libros = libros
       this.$router.replace('/')
       this.$router.push({name: 'resultados', params: { Libros: this.Libros }})
+      this.searchprogress = false
     },
     menu: function (index) {
       this.$router.push('/' + index)
@@ -292,6 +283,9 @@ export default {
       this.enviando = false
       this.dialog = false
       this.snackbar = true
+    },
+    home: function () {
+      this.$router.push('/')
     }
   }
 }
@@ -299,5 +293,12 @@ export default {
 <style>
 .progress {
   margin-left: 43% !important;
+}
+.searchprogress {
+  margin-top: 20vh !important;
+}
+.logo{
+  position: relative;
+  height: 100%;
 }
 </style>
