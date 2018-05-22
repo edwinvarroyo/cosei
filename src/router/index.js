@@ -13,12 +13,6 @@ export default new Router({
       path: '/',
       name: 'Inicio',
       component: Inicio
-    },
-    {
-      path: '/resultados',
-      name: 'resultados',
-      component: Resultados,
-      props: true
     }
   ]
 })

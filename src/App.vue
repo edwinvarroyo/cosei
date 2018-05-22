@@ -134,18 +134,6 @@
         </v-dialog>
       </v-layout>
       <v-spacer></v-spacer>
-      <v-layout row align-center style="max-width: 650px" hidden-sm-and-down>
-        <v-text-field
-          placeholder="Buscar..."
-          single-line
-          v-model="toSearch"
-          append-icon="search"
-          :append-icon-cb="search"
-          color="white"
-          hide-details
-          v-on:keyup.enter='search'
-        ></v-text-field>
-      </v-layout>
     </v-toolbar>
     <v-content>
       <v-layout v-if='searchprogress' class='searchprogress' row justify-space-around>
